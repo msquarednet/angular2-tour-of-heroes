@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero'
 //import {} from './hero-detail.component' //not needed because of app.module.ts
+import {HeroService} from './hero.service'
 
 @Component({
 styles: [`
@@ -64,26 +65,44 @@ styles: [`
             </li>        
         </ul>      
         <my-hero-detail [hero]="selectedHero"></my-hero-detail>  
-        `
+        `,
+    providers: [HeroService]
 })
-export class AppComponent { 
-    title = 'Tour of Heroes';
-    //hero:Hero = {id:1, name:'Windstorm'};    // hero:Hero = new Hero(1,'Windstormy');
-    selectedHero: Hero;
-    public heroes = HEROES;
-    onSelect (hero: Hero) {this.selectedHero=hero};
+export class AppComponent implements OnInit { 
+  //hero:Hero = {id:1, name:'Windstorm'};    // hero:Hero = new Hero(1,'Windstormy');
+  // public heroes = HEROES;
+  title = 'Tour of Heroes';
+  selectedHero: Hero;
+  heroes: Hero[];
+
+  constructor(private heroService: HeroService) {}
+  getHeroes() {
+    // this.heroes = this.heroService.getHeroes()
+    this.heroService.getHeroes().then(
+      (h) => this.heroes = h 
+    )
+  }
+  onSelect (hero: Hero) {this.selectedHero=hero};
+
+  ngOnInit() {
+    this.getHeroes();
+  }
 }
 
-const HEROES: Hero[] = [
-  { id: 11, name: 'Mr. Nice' },
-  { id: 12, name: 'Narco' },
-  { id: 13, name: 'Bombasto' },
-  { id: 14, name: 'Celeritas' },
-  { id: 15, name: 'Magneta' },
-  { id: 16, name: 'RubberMan' },
-  { id: 17, name: 'Dynama' },
-  { id: 18, name: 'Dr IQ' },
-  { id: 19, name: 'Magma' },
-  { id: 20, name: 'Tornado' }    
-];
+
+
+
+
+// const HEROES: Hero[] = [
+//   { id: 11, name: 'Mr. Nice' },
+//   { id: 12, name: 'Narco' },
+//   { id: 13, name: 'Bombasto' },
+//   { id: 14, name: 'Celeritas' },
+//   { id: 15, name: 'Magneta' },
+//   { id: 16, name: 'RubberMan' },
+//   { id: 17, name: 'Dynama' },
+//   { id: 18, name: 'Dr IQ' },
+//   { id: 19, name: 'Magma' },
+//   { id: 20, name: 'Tornado' }    
+// ];
 
