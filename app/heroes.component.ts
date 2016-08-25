@@ -15,11 +15,14 @@ export class HeroesComponent implements OnInit {
   // public heroes = HEROES;
   title = 'Tour of Heroes';
   selectedHero: Hero;
+  addingHero: boolean;
   heroes: Hero[];
+  error:any;
 
   constructor(
     private heroService: HeroService,
     private router:Router) {}
+
   getHeroes() {
     // this.heroes = this.heroService.getHeroes()
     this.heroService.getHeroes().then(
@@ -31,6 +34,25 @@ export class HeroesComponent implements OnInit {
     let link = ['/detail', this.selectedHero.id];
     this.router.navigate(link);
   }
+  addHero() {
+    this.addingHero = true;
+    this.selectedHero = null;
+  }
+  deleteHero(hero:Hero, event:any) {
+    event.stopPropagation();
+    this.heroService
+      .delete(hero)
+      .then(res => {
+        this.heroes = this.heroes.filter(h => h !== hero);
+        if (this.selectedHero === hero) {this.selectedHero = null};
+      })
+      .catch(err => this.error = err)
+  }
+  close(savedHero:Hero) {
+    this.addingHero = false;
+    if (savedHero) {this.getHeroes()};
+  }
+
   ngOnInit() {
     this.getHeroes();
   }

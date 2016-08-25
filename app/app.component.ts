@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-
+// import './rxjs-extensions';  I decided to move this to app.module.ts ;)
 
 @Component({
     selector: 'my-app',
